@@ -1,1 +1,3 @@
-# SYS-265-Final-Project-hell-
+# SYS-265-Final-Project
+
+**Wow!!** This is the repo for Rune, Nydia, and Rose's final project!
