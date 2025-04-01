@@ -1,0 +1,54 @@
+@startuml
+
+skinparam linetype ortho
+skinparam rectangle {
+  BorderColor black
+  BackgroundColor white
+  FontSize 12
+}
+
+' DMZ Network Box
+rectangle "DMZ:\n10.0.17.x/24" as dmz_network_box_1 #yellow
+
+' Note to indicate internet (couldn't get a connection to work for some reason)
+note left of dmz_network_box_1
+  Internet -> DMZ Network
+end note
+
+' Firewall
+rectangle "fw-fortgoblins\nPfSense\nWAN: 10.0.17.100/24\nLAN: 10.0.5.2/24" as fw #lightgray
+dmz_network_box_1 -down-> fw
+
+' LAN Network Box
+rectangle "LAN:\n10.0.5.x/24" as lan_network_box #lightgreen
+fw -down-> lan_network_box
+
+' Domain Controllers (dc) - Parent of Management, Workstations, and File Servers
+rectangle "Domain Controller (dc)\nfortgoblins\n10.0.5.5/24\nBackup for redundancy:\ndc2-fortgoblins\n10.0.5.6/24\nWindows Server Core (ADDS)" as dc #lightblue
+lan_network_box -down-> dc
+
+' Management Servers (m) - Managed by Domain Controller (dc)
+rectangle "Management Servers\nmgmt1-fortgoblins\n10.0.5.10/24\nBackup for redundancy:\nmgmt2-fortgoblins\n10.0.5.11/24" as mgmt_servers #lightgray
+dc -down-> mgmt_servers
+
+' File Server (dfs) - Managed by Domain Controller (dc)
+rectangle "File Server (dfs)\ndfs1-fortgoblins\n10.0.5.51/24\nBackup for redundancy:\ndfs2-fortgoblins\n10.0.5.52/24" as dfs_servers #lightgray
+dc -down-> dfs_servers
+
+' Workstations (w) - Managed by Management Servers (m)
+rectangle "Workstations\nw1-fortgoblins\n10.0.5.101/24\nw2-fortgoblins\n10.0.5.102/24" as workstations #lightgray
+mgmt_servers -down-> workstations
+
+' Utility Server (util) - Managed by Management Servers (m)
+rectangle "Utility Server (util)\nutil-fortgoblins\n10.0.5.14/24\nAnsible (CentOS)" as util_server #lightgray
+mgmt_servers -down-> util_server
+
+' DHCP Servers (dhcp1/dhcp2) and Docker - Connected to Domain Controller (dc)
+rectangle "DHCP Servers\ndhcp1-fortgoblins\n10.0.5.12/24\nBackup for redundancy:\ndhcp2-fortgoblins\n10.0.5.13/24" as dhcp_servers #lightgray
+rectangle "Docker Server\ndocker-fortgoblins\n10.0.5.50/24" as docker_server #lightgray
+
+' Connections from Domain Controller (dc)
+dc -down-> dhcp_servers
+dc -down-> docker_server
+
+@enduml
