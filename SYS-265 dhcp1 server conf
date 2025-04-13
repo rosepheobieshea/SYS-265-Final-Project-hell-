@@ -1,7 +1,7 @@
 {
 "Dhcp4": {
     "interfaces-config": {
-        "interfaces": ["ens????"]
+        "interfaces": ["ens192"]
     },
 
     "lease-database": {
