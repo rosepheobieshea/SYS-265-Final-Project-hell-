@@ -20,7 +20,7 @@
     "subnet4": [
       {
         "id": 1,
-        "subnet": "10.0.5.0",
+        "subnet": "10.0.5.0/24",
         "pools": [
           {
             "pool": "10.0.5.100 - 10.0.5.200"
@@ -36,10 +36,10 @@
     ],
     "hooks-libraries": [
       {
-        "library": "/usr/lib/x86_64-linux-gnu/kea/hooks/libdhcp_lease_cmds.so"
+        "library": "/usr/lib64/kea/hooks/libdhcp_lease_cmds.so"
       },
       {
-        "library": "/usr/lib/x86_64-linux-gnu/kea/hooks/libdhcp_ha.so",
+        "library": "/usr/lib64/kea/hooks/libdhcp_ha.so",
         "parameters": {
           "high-availability": [
             {

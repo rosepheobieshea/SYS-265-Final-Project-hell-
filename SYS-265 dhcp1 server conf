@@ -20,7 +20,7 @@
     "subnet4": [
       {
         "id": 1,
-        "subnet": "10.0.5.0",
+        "subnet": "10.0.5.0/24",
         "pools": [
           {
             "pool": "10.0.5.100 - 10.0.5.200"
@@ -32,6 +32,34 @@
             "data": "10.0.5.2"
           }
         ],
+      }
+    ],
+    "hooks-libraries": [
+      {
+        "library": "/usr/lib64/kea/hooks/libdhcp_lease_cmds.so"
+      },
+      {
+        "library": "/usr/lib64/kea/hooks/libdhcp_ha.so",
+        "parameters": {
+          "high-availability": [
+            {
+              "this-server-name": "dhcp1-fortgoblins",
+              "mode": "hot-standby",
+              "peers": [
+                {
+                  "name": "dhcp1-fortgoblins",
+                  "url": "http://10.0.5.12:8000/",
+                  "role": "primary"
+                },
+                {
+                  "name": "dhcp2-fortgoblins",
+                  "url": "http://10.0.5.13:8000/",
+                  "role": "standby"
+                }
+              ]
+            }
+          ]
+        }
       }
     ],
   }
