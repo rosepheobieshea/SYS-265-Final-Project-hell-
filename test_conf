@@ -1,0 +1,37 @@
+{
+  "Dhcp4": {
+    "interfaces-config": {
+      "interfaces": [
+        "eth0"
+      ]
+    },
+    "lease-database": {
+      "type": "memfile",
+      "persist": true,
+      "name": "/tmp/dhcp4.leases"
+    },
+    "valid-lifetime": 28800,
+    "option-data": [
+      {
+        "name": "domain-name-servers",
+        "data": "192.0.2.1, 192.0.2.2"
+      }
+    ],
+    "subnet4": [
+      {
+        "subnet": "192.0.2.0/24",
+        "pools": [
+          {
+            "pool": "192.0.2.1 - 192.0.2.200"
+          }
+        ],
+        "option-data": [
+          {
+            "name": "routers",
+            "data": "192.0.2.1"
+          }
+        ],
+      }
+    ],
+  }
+}
