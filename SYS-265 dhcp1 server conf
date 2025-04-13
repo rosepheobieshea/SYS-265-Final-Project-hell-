@@ -45,6 +45,7 @@
             {
               "this-server-name": "dhcp1-fortgoblins",
               "mode": "hot-standby",
+              "max-unacked-clients": 0,
               "peers": [
                 {
                   "name": "dhcp1-fortgoblins",
