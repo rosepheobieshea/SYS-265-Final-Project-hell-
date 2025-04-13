@@ -1,47 +1,38 @@
 {
-"Dhcp4": {
+  "Dhcp4": {
     "interfaces-config": {
-        "interfaces": ["ens192"]
+      "interfaces": [
+        "ens192"
+      ]
     },
-
     "lease-database": {
-        "type": "memfile",
-        "persist": true,
-        "name": "/var/lib/kea/kea-leases4.csv",
-        "lfc-interval": 3600
+      "type": "memfile",
+      "persist": true,
+      "name": "/tmp/dhcp4.leases"
     },
-
-    "renew-timer": 15840,
-    "rebind-timer": 27720,
-    "valid-lifetime": 31680,
-
+    "valid-lifetime": 28800,
     "option-data": [
-        {
-            "name": "domain-name-servers",
-            "data": "10.0.5.5, 10.0.5.6"
-        },
-
-        {
-            "name": "domain-search",
-            "data": "fortgoblins.local"
-        }
+      {
+        "name": "domain-name-servers",
+        "data": "10.0.5.5, 10.0.5.6"
+      }
     ],
-
     "subnet4": [
-        {
-            "subnet": "10.0.5.0/24",
-            "pools": [ { "pool": "10.0.5.100 - 10.0.5.199" } ],
-            "option-data": [
-                {
-                    "name": "routers",
-                    "data": "10.0.5.2"
-                }
-            ]
-
-            // Add reservations here
-        }
-
-        // Add subnets here
-    ]
-}
+      {
+        "id": 1,
+        "subnet": "10.0.5.0",
+        "pools": [
+          {
+            "pool": "10.0.5.100 - 10.0.5.200"
+          }
+        ],
+        "option-data": [
+          {
+            "name": "routers",
+            "data": "10.0.5.2"
+          }
+        ],
+      }
+    ],
+  }
 }
