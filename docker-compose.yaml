@@ -1,0 +1,16 @@
+services:
+  env_file: ./docker-joomla.env
+  joomla:
+    image: joomla
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - JOOMLA_DB_HOST=joomladb
+      - JOOMLA_DB_PASSWORD=${Joomla_db_pass}
+
+  joomladb:
+    image: mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=${Mysql_db_pass}
