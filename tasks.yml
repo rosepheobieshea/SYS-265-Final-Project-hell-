@@ -1,0 +1,73 @@
+---
+# Playbook: tasks.yml
+# requirements:
+# 1. Use Ansible to install an apt-package.
+# 2. Use Ansible to install a yum package.
+# 3. Use Ansible to add a new Linux local user can be an SSH user or one with a password.
+# 4. Use Ansible to add a new Windows domain user
+
+# 1. Install an apt package on Ubuntu host (m2-fortgoblins)
+- name: Install apt package on Ubuntu host
+  hosts: ubuntu
+  become: yes
+  tasks:
+    - name: Install 'htop' using apt
+      ansible.builtin.apt:
+        name: htop
+        state: present
+      # htop can show running processes for unix
+
+# 2. Install a yum package on Rocky/CentOS hosts (dhcp1, dhcp2, util)
+- name: Install yum package on Rocky/CentOS hosts
+  hosts: rocky
+  become: yes
+  tasks:
+    - name: Install 'vim' using yum
+      ansible.builtin.yum:
+        name: vim
+        state: present
+      # vim for file editing
+
+# 3. Add a new Linux local user (all Linux hosts)
+- name: Add local user to all Linux hosts
+  hosts: ubuntu, rocky
+  become: yes
+  vars:
+    new_linux_user: loc-fort-user
+    linux_user_password: "{{ '[redacted]' | password_hash('sha512') }}" 
+    ssh_public_key: "ssh-rsa [redacted]"  
+  tasks:
+    - name: Ensure the user exists
+      ansible.builtin.user:
+        name: "{{ new_linux_user }}"
+        password: "{{ linux_user_password }}"
+        shell: /bin/bash
+        append: yes
+
+    - name: Add SSH public key for the user
+      ansible.posix.authorized_key:
+        user: "{{ new_linux_user }}"
+        key: "{{ ssh_public_key }}"
+        state: present
+
+# 4. Add a new Windows domain user (domain controllers only)
+- name: Add Windows domain user via domain controller
+  hosts: windows
+  vars:
+    domain_user_name: domain-fort-user
+    domain_user_password: "[redacted]"
+    domain_user_upn: "domain-fort-user@fortgoblins.local"
+    domain_user_firstname: Fortgoblins
+    domain_user_surname: User
+    domain_user_groups:
+      - "Domain Users"
+  tasks:
+    - name: Ensure domain user exists
+      community.windows.win_domain_user:
+        name: "{{ domain_user_name }}"
+        password: "{{ domain_user_password }}"
+        upn: "{{ domain_user_upn }}"
+        firstname: "{{ domain_user_firstname }}"
+        surname: "{{ domain_user_surname }}"
+        groups: "{{ domain_user_groups }}"
+        state: present
