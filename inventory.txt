@@ -1,0 +1,24 @@
+[ubuntu]
+localhost
+
+[ubuntu:vars]
+ansible_connection=local
+
+[rocky]
+dhcp1-fortgoblins
+dhcp2-fortgoblins
+util-fortgoblins
+
+[rocky:vars]
+ansible_user=deployer
+
+[windows]
+dc1-fortgoblins
+dc2-fortgoblins
+
+[windows:vars]
+ansible_connection=ssh
+ansible_shell_type=powershell
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+ansible_user=rose.davis-adm@fortgoblins.local
+
