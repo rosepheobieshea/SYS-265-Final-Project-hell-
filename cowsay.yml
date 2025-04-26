@@ -1,0 +1,25 @@
+---
+# cowsay.yml
+- name: Install cowsay on util
+  hosts: util-fortgoblins
+  become: yes   # Uses sudo privileges
+  tasks:
+    - name: Install EPEL repository 
+      ansible.builtin.yum:
+        name: epel-release
+        state: present
+
+    - name: Install cowsay package
+      ansible.builtin.yum:
+        name: cowsay
+        state: present
+
+    - name: Test cowsay installation
+      ansible.builtin.command:
+        cmd: cowsay "Hello fortgoblins!"
+      register: cowsay_test
+      changed_when: false 
+
+    - name: Display cowsay output
+      ansible.builtin.debug:
+        var: cowsay_test.stdout
