@@ -16,7 +16,7 @@
 
     - name: Test cowsay installation
       ansible.builtin.command:
-        cmd: cowsay "Hello fortgoblins!"
+        cmd: /usr/bin/cowsay -f /usr/share/cowsay/cows/default.cow "Hello, Fortgoblins!"
       register: cowsay_test
       changed_when: false 
 
