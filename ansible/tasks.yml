@@ -15,7 +15,8 @@
       ansible.builtin.apt:
         name: htop
         state: present
-      # htop can show running processes for unix
+  tags: apt_install
+    # htop can show running processes for unix
 
 # 2. Install a yum package on Rocky/CentOS hosts (dhcp1, dhcp2, util)
 - name: Install yum package on Rocky/CentOS hosts
@@ -26,6 +27,7 @@
       ansible.builtin.yum:
         name: vim
         state: present
+  tags: yum_install
       # vim for file editing
 
 # 3. Add a new Linux local user (all Linux hosts)
@@ -34,8 +36,8 @@
   become: yes
   vars:
     new_linux_user: loc-fort-user
-    linux_user_password: "{{ '[redacted]' | password_hash('sha512') }}" 
-    ssh_public_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDkzl1Ik9V/CXH1XCrE01ya45kTM1Sh3hX1+88EDStoQVvy6FKrx/HV6WGrdkFxLfBYw3EPRoRHOkdeJDzK5/xwLuytczyYtIX+krXhG0fwGtoMW5Z9xRBK/PPEIXYc/k+v3LdaG+JrwXV6FgUy23NB7QvG6+qH26oivaEGc56LBuMiaT1Uvm6wMykQn4wWHtH5BEB4MhmscJwA1jg9AK7bX+wkfvm5JbwO9ec3i1o3wTy+mEvYCx06c8JsZIhZMBPOMA0Ootq7vfCBw8TJA+HXJkYdap60vEmW5tIvdM8StAK6WcD5c/OfihSPfzT5MIfH+bOli8nMG5u+aqXdDPQMMsewBKxxRbBbPQU8yQFH881IfV9mF9FLzSsRqDE0lpuCu0mo6XgcouSYx+ih+ee31poqNWTUHiLYL+UILQI+T+NWjkxj06BUdNvdrYRJvQAniwImcCDNL3pH3+b5zN6ne+ww35GlXkboeNM3sLsZ5DGFpxCQfYouqVgGNZtJZt8= fortgoblins"  
+    linux_user_password: "{{ 'f0rtnit3!' | password_hash('sha512') }}"
+    ssh_public_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDkzl1Ik9V/CXH1XCrE01ya45kTM1Sh3hX1+88EDStoQVvy6FKrx/HV6WGrdkFxLfBYw3EPRoRHOkdeJDzK5/xwLuytczyYtIX+krXhG0fwGtoMW5Z9xRBK/PPEIXYc/k+v3LdaG+JrwXV6FgUy23NB7QvG6+qH26oivaEGc56LBuMiaT1Uvm6wMykQn4wWHtH5BEB4MhmscJwA1jg9AK7bX+wkfvm5JbwO9ec3i1o3wTy+mEvYCx06c8JsZIhZMBPOMA0Ootq7vfCBw8TJA+HXJkYdap60vEmW5tIvdM8StAK6WcD5c/OfihSPfzT5MIfH+bOli8nMG5u+aqXdDPQMMsewBKxxRbBbPQU8yQFH881IfV9mF9FLzSsRqDE0lpuCu0mo6XgcouSYx+ih+ee31poqNWTUHiLYL+UILQI+T+NWjkxj06BUdNvdrYRJvQAniwImcCDNL3pH3+b5zN6ne+ww35GlXkboeNM3sLsZ5DGFpxCQfYouqVgGNZtJZt8= fortgoblins"
   tasks:
     - name: Ensure the user exists
       ansible.builtin.user:
@@ -49,13 +51,14 @@
         user: "{{ new_linux_user }}"
         key: "{{ ssh_public_key }}"
         state: present
+  tags: linux_user
 
 # 4. Add a new Windows domain user (domain controllers only)
 - name: Add Windows domain user via domain controller
   hosts: windows
   vars:
     domain_user_name: domain-fort-user
-    domain_user_password: "[redacted]"
+    domain_user_password: "f0rtnit3!"
     domain_user_upn: "domain-fort-user@fortgoblins.local"
     domain_user_firstname: Fortgoblins
     domain_user_surname: User
@@ -71,3 +74,4 @@
         surname: "{{ domain_user_surname }}"
         groups: "{{ domain_user_groups }}"
         state: present
+  tags: win_domain_user
