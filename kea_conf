@@ -1,0 +1,54 @@
+{
+  "Dhcp4": {
+    "interfaces-config": {
+      "interfaces": [ "enp0s3" ]
+    },
+
+    "lease-database": {
+      "type": "memfile",
+      "persist": true,
+      "name": "/var/lib/kea/dhcp4.leases"
+    },
+
+    "valid-lifetime": 28800,
+    "option-data": [
+      {
+        "name": "domain-name-servers",
+        "data": "10.0.5.5, 10.0.5.6"
+      }
+    ],
+
+    "subnet4": [
+      {
+        "id": 1,
+        "subnet": "192.168.1.0/24",
+        "pools": [
+          { "pool": "192.168.1.20 - 192.168.1.200" }
+        ],
+        "option-data": [
+          { "name": "routers", "data": "192.168.1.1" }
+        ]
+      },
+      {
+        "id": 2,
+        "subnet": "192.168.3.0/24",
+        "pools": [
+          { "pool": "192.168.3.20 - 192.168.3.200" }
+        ],
+        "option-data": [
+          { "name": "routers", "data": "192.168.3.1" }
+        ]
+      }
+    ],
+
+    "loggers": [
+      {
+        "name": "kea-dhcp4",
+        "output-options": [
+          { "output": "stdout" }
+        ],
+        "severity": "INFO"
+      }
+    ]
+  }
+}
